@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vis.js Edge from Source to Pointer Example</title>
+  <script type="text/javascript" src="https://unpkg.com/vis-network@7.6.0/dist/vis-network.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/vis-network@7.6.0/dist/vis-network.min.css">
+  <style type="text/css">
+    #mynetwork {
+      width: 600px;
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div id="mynetwork"></div>
+
+  <script type="text/javascript">
+    // Create a network container
+    var container = document.getElementById('mynetwork');
+
+    // Define nodes and edges as empty arrays initially
+    var nodes = new vis.DataSet([]);
+    var edges = new vis.DataSet([]);
+
+    // Create a network
+    var data = {
+      nodes: nodes,
+      edges: edges
+    };
+
+    var options = {
+      interaction: {
+        dragNodes: true, // Allow dragging of nodes
+        dragView: true, // Allow panning/scrolling
+        zoomView: true, // Allow zooming
+      },
+    };
+
+    var network = new vis.Network(container, data, options);
+
+    // Handle node creation on click
+    network.on("click", function (params) {
+      if (params.nodes.length === 0) {
+        // Create a new node at the clicked position
+        var newNode = { id: nodes.length + 1, label: 'Node ' + (nodes.length + 1), x: params.pointer.canvas.x, y: params.pointer.canvas.y };
+        nodes.add(newNode);
+      }
+    });
+
+    // Handle edge creation from a source node to pointer position
+    network.on("click", function (params) {
+      if (params.nodes.length === 1) {
+        var sourceNodeId = params.nodes[0];
+        var pointerX = params.pointer.canvas.x;
+        var pointerY = params.pointer.canvas.y;
+        // Create an edge from the source node to the pointer position
+        var newEdge = { from: sourceNodeId, to: null, x: pointerX, y: pointerY };
+        edges.add(newEdge);
+      }
+    });
+  </script>
+</body>
+</html>
