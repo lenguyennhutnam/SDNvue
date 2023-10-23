@@ -5,22 +5,11 @@
 </template>
 
 <script>
-// import Canvas from "./components/canvas/Canvas.vue";
-<<<<<<< HEAD
-// import VisContainer from "@/components/vis/VisContainer.vue";
-// import BtnList from "./components/canvas/BtnList.vue";
-import MainPage from "./components/canvas/MainPage.vue";
-export default {
-  name: "App",
-  components: {
-=======
 import MainPage from "./components/canvas/MainPage.vue";
 
 export default {
   name: "App",
   components: {
-    // Canvas,
->>>>>>> 033623aadcef512133c5a632393a71f014da8ae2
     MainPage,
   },
   data() {

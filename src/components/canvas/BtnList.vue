@@ -15,15 +15,11 @@ export default {
   },
   data() {
     return {};
-<<<<<<< HEAD
   },
   mounted() {
     this.eventBus.on("offAddNode", this.offNode);
     this.eventBus.on("offAddEdge", this.offEdge);
-=======
->>>>>>> 033623aadcef512133c5a632393a71f014da8ae2
   },
-  mounted() {},
   methods: {
     offNode() {
       this.$refs.switch.isActive = false;
