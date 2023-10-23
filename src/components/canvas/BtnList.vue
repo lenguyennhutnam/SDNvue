@@ -1,17 +1,17 @@
 <template>
   <div class="button-list">
-    <add-btn ref="host" id="host" @click="activeHost"></add-btn>
-    <add-btn ref="switch" id="switch" @click="acitveSwitch"></add-btn>
-    <add-btn ref="edge" id="edge" @click="acitveEdge"></add-btn>
+    <func-btn ref="host" id="host" @click="activeHost"></func-btn>
+    <func-btn ref="switch" id="switch" @click="acitveSwitch"></func-btn>
+    <func-btn ref="edge" id="edge" @click="acitveEdge"></func-btn>
   </div>
 </template>
 
 <script>
-import AddBtn from "./AddBtn.vue";
+import FuncBtn from "./FuncBtn.vue";
 export default {
   name: "BtnList",
   components: {
-    AddBtn,
+    FuncBtn,
   },
   data() {
     return {};

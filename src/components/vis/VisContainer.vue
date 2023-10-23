@@ -53,6 +53,11 @@ export default {
         this.noEdit = noEdit || false;
       },
     },
+    nodeList: {
+      Host: [],
+      Switch: [],
+    },
+    edgeList: [],
     mouseTag: {
       x: 0,
       y: 0,
@@ -156,6 +161,11 @@ export default {
       this.$el.focus();
     },
 
+    nextLabel(type) {
+      let typeList = this.nodeList[type];
+      return `${type} ${typeList.length + 1}`;
+    },
+
     init({ net, nodes, edges }) {
       this.net = net;
       this.nodes = nodes;
@@ -166,26 +176,46 @@ export default {
         manipulation: {
           enabled: false,
           addNode: (node, callback) => {
-            node.label = this.newItem.type;
-            node.group = this.newItem.type;
+            let type = this.newItem.type;
+            node.label = this.nextLabel(type);
+            node.group = type;
             callback(node);
+            this.nodeList[type].push(node);
+            this.newItem.set();
             this.eventBus.emit("offAddNode");
           },
           addEdge: (edge, callback) => {
             callback(edge);
+            this.edgeList.push(edge);
+            this.newItem.set();
             this.eventBus.emit("offAddEdge");
           },
+          deleteNode: () => {},
         },
       });
+
+      // TEST =================================================================
       this.nodes.add([
         { id: 1, label: "Host 1", group: "Host" },
         { id: 2, label: "Switch 1", group: "Switch" },
         { id: 3, label: "Host 2", group: "Host" },
       ]);
+      this.nodeList["Host"].push(
+        { id: 1, label: "Host 1", group: "Host" },
+        { id: 3, label: "Host 2", group: "Host" }
+      );
+      this.nodeList["Switch"].push({
+        id: 2,
+        label: "Switch 1",
+        group: "Switch",
+      });
       this.edges.add([
         { from: 1, to: 2 },
         { from: 2, to: 3 },
       ]);
+      this.edgeList.push({ from: 1, to: 2 }, { from: 2, to: 3 });
+      // =================================================================
+
       // Save new positions if any missing
       // this.commitUncommitedPositions();
       // Manipulation

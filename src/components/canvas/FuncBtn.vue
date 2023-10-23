@@ -3,7 +3,7 @@
     color="background"
     :id="id"
     :class="id"
-    class="add-btn"
+    class="func-btn"
     :icon="icon"
     :active="isActive"
     @click="clickBtn"
@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style scoped>
-.add-btn {
+.func-btn {
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: #ccc;
