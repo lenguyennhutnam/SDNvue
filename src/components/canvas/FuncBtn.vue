@@ -28,6 +28,7 @@ export default {
         host: "mdi-laptop",
         switch: "mdi-switch",
         edge: "mdi-transit-connection-variant",
+        delete: "mdi-delete-outline",
       },
       isActive: false,
     };

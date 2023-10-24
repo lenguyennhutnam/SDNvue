@@ -62,7 +62,6 @@ export default {
 .vis-root {
   width: inherit;
   height: inherit;
-  background-color: #ccc;
 }
 /* .vis-container {
   position: relative;

@@ -3,6 +3,7 @@
     <func-btn ref="host" id="host" @click="activeHost"></func-btn>
     <func-btn ref="switch" id="switch" @click="acitveSwitch"></func-btn>
     <func-btn ref="edge" id="edge" @click="acitveEdge"></func-btn>
+    <func-btn ref="delete" id="delete" @click="activeDelete"></func-btn>
   </div>
 </template>
 
@@ -17,25 +18,28 @@ export default {
     return {};
   },
   mounted() {
-    this.eventBus.on("offAddNode", this.offNode);
-    this.eventBus.on("offAddEdge", this.offEdge);
+    this.eventBus.on("offBtn", this.offBtn);
   },
   methods: {
-    offNode() {
+    offBtn() {
       this.$refs.switch.isActive = false;
       this.$refs.host.isActive = false;
-    },
-    offEdge() {
       this.$refs.edge.isActive = false;
+      this.$refs.delete.isActive = false;
     },
     acitveBtn(ref) {
       let lastState = ref.isActive;
-      this.offNode();
+      this.offBtn();
       ref.isActive = lastState;
-      this.eventBus.emit(
-        `add${ref.id.charAt(0).toUpperCase() + ref.id.slice(1)}`
-      );
+      if (ref.id == "delete") {
+        this.eventBus.emit("deleteNode");
+      } else {
+        this.eventBus.emit(
+          `add${ref.id.charAt(0).toUpperCase() + ref.id.slice(1)}`
+        );
+      }
     },
+
     activeHost() {
       this.acitveBtn(this.$refs.host);
     },
@@ -44,6 +48,9 @@ export default {
     },
     acitveEdge() {
       this.acitveBtn(this.$refs.edge);
+    },
+    activeDelete() {
+      this.acitveBtn(this.$refs.delete);
     },
   },
 };

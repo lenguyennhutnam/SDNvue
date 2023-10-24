@@ -1,26 +1,18 @@
 <template>
-  <!-- <div> -->
-  <VisCanvas @ready="init" />
-  <!-- <div
-      v-if="newItem.type !== ''"
-      :style="{ left: mouseTag.x + 'px', top: mouseTag.y + 'px' }"
+  <div
+    class="component-container"
+    @mousemove="moveMouseTag"
+    @drag="moveMouseTag"
+  >
+    <div
+      v-if="this.newItem.type != ''"
+      :style="{ left: mouseTag.x + 20 + 'px', top: mouseTag.y + 5 + 'px' }"
       class="mouse-tag"
     >
-      <v-icon color="black">{{ mouseTagIcon }}</v-icon>
-    </div> -->
-
-  <!-- <v-snackbar
-      v-model="snackbar.show"
-      :data-cy-type="snackbar.type"
-      :data-cy-values="JSON.stringify(snackbar.values)"
-      data-cy="vis-snackbar"
-    >
-      {{ snackbar.message }}
-      <v-btn color="primary" text @click="snackbar.actionFunction()">
-        {{ snackbar.actionName }}
-      </v-btn>
-    </v-snackbar> -->
-  <!-- </div> -->
+      <v-icon color="black" :icon="mouseTagIcon"></v-icon>
+    </div>
+    <VisCanvas class="viscanvas" @ready="init" ref="rootVis"></VisCanvas>
+  </div>
 </template>
 
 <script>
@@ -42,7 +34,7 @@ export default {
   components: { VisCanvas },
   data: () => ({
     newItem: {
-      type: null,
+      type: "",
       connectTo: null,
       label: null,
       noEdit: false,
@@ -72,11 +64,22 @@ export default {
   //     return "$vuetify.icons.net-" + this.newItem.type;
   //   },
   // },
+  computed: {
+    mouseTagIcon() {
+      let icon = {
+        Host: "mdi-laptop",
+        Switch: "mdi-switch",
+        Delete: "mdi-delete-outline",
+      };
+      let type = this.newItem.type;
+      return icon[type];
+    },
+  },
   mounted() {
     // this.focusRoot();
   },
   methods: {
-    moveMouseTag({ clientX: x, clientY: y }) {
+    moveMouseTag({ offsetX: x, offsetY: y }) {
       this.mouseTag.x = x;
       this.mouseTag.y = y;
     },
@@ -91,6 +94,11 @@ export default {
     addSwitch() {
       this.newItem.set("Switch");
       this.net.addNodeMode();
+    },
+    deleteNode() {
+      this.newItem.set();
+      console.log(this.newItem);
+      this.net.deleteSelected();
     },
     stopEditMode() {
       this.newItem.set();
@@ -158,7 +166,7 @@ export default {
       return edgeTests[type](src, dst);
     },
     focusRoot() {
-      this.$el.focus();
+      this.$refs.rootVis.focus();
     },
 
     nextLabel(type) {
@@ -177,20 +185,30 @@ export default {
           enabled: false,
           addNode: (node, callback) => {
             let type = this.newItem.type;
+            this.eventBus.emit("open" + type + "Dialog");
             node.label = this.nextLabel(type);
             node.group = type;
             callback(node);
             this.nodeList[type].push(node);
             this.newItem.set();
-            this.eventBus.emit("offAddNode");
+            this.eventBus.emit("offBtn");
           },
           addEdge: (edge, callback) => {
             callback(edge);
             this.edgeList.push(edge);
             this.newItem.set();
-            this.eventBus.emit("offAddEdge");
+            this.eventBus.emit("offBtn");
           },
-          deleteNode: () => {},
+          deleteNode: (data, callback) => {
+            callback(data);
+            this.newItem.set();
+            this.eventBus.emit("offBtn");
+          },
+          deleteEdge: (data, callback) => {
+            callback(data);
+            this.newItem.set();
+            this.eventBus.emit("offBtn");
+          },
         },
       });
 
@@ -423,7 +441,22 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.viscanvas {
+  height: inherit;
+}
+
+.component-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.mouse-tag {
+  position: fixed;
+  margin: 1em;
+}
+</style>
 
 <style>
 .component-container {

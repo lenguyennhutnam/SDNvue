@@ -1,16 +1,18 @@
 <template>
   <!-- <Canvas @ready="clickBtn"></Canvas>
   <v-btn id="btn">Click</v-btn> -->
+  <edit-host></edit-host>
   <main-page></main-page>
 </template>
 
 <script>
 import MainPage from "./components/canvas/MainPage.vue";
-
+import EditHost from "./components/edit/EditHost.vue";
 export default {
   name: "App",
   components: {
     MainPage,
+    EditHost,
   },
   data() {
     return {
