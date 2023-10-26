@@ -4,13 +4,13 @@
       v-model="dialog"
       persistent
       width="640"
-      ref="addHostDialog"
+      ref="addSwitchDialog"
       @keydown="hotkeys"
     >
       <v-card>
         <v-card-title>
-          <v-icon icon="mdi-laptop"></v-icon>
-          <span class="text-h5" icon="mdi-laptop"> Host </span>
+          <v-icon icon="mdi-switch"></v-icon>
+          <span class="text-h5" icon="mdi-switch"> Switch </span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -18,18 +18,22 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="item.name"
-                  label="Host name*"
+                  label="Switch name*"
                   required
                   autofocus
                   variant="underlined"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  v-model="this.item.defRoute"
+                <v-select
+                  v-model="item.switchType"
+                  :items="switchTypes"
+                  item-title="text"
+                  item-value="value"
+                  label="Type"
+                  clearable
                   variant="underlined"
-                  label="Default route"
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="6">
                 <v-text-field
@@ -83,38 +87,28 @@
 </template>
 
 <script>
-// import common from "./common";
-// import errors from "@/validation/errors";
-// import {
-// required,
-// hostname,
-// ip,
-// between,
-// decimal,
-// naturalNumberList,
-// } from "@/validation/rules";
+import {
+  switchTypes,
+  // failModes,
+  // datapaths,
+  // protocolsOF,
+} from "@/components/selects";
 export default {
   mounted() {
-    this.eventBus.on("addHostDialog", (nextLabel) => {
+    this.eventBus.on("addSwitchDialog", (nextLabel) => {
       this.item.name = nextLabel;
       this.dialog = true;
     });
     this.eventBus.on("canceled", () => this.resetData());
   },
-  // mixins: [common, errors],
-  // validations: {
-  //   item: {
-  //     defRoute: { ip },
-  //     // name: { required, name },
-  //   },
-  // },
+
   data() {
     return {
       dialog: false,
+      switchTypes,
       item: {},
     };
   },
-
   methods: {
     hotkeys(e) {
       if (e.key == "Enter") {
@@ -123,21 +117,18 @@ export default {
     },
     resetData() {
       this.item = {};
-      // for (let field in this.host) {
-      //   this.host[field] = null;
-      // }
     },
     sendData() {
+      console.log(this.item.switchType);
       if (this.item.name) {
-        this.eventBus.emit("newHostSuccess", {
-          type: "Host",
+        this.eventBus.emit("newSwitchSuccess", {
+          type: "Switch",
           name: this.item.name,
-          defRoute: this.item.defRoute,
           subnetMask: this.item.subnetMask,
           ipv4: this.item.ipv4,
           ipv6: this.item.ipv6,
+          switchType: this.item.switchType,
         });
-        console.log(this.item);
         this.dialog = false;
       }
       this.resetData();

@@ -2,7 +2,8 @@
   <div id="canvas-box" @mousemove="moveMouseTag">
     <btn-list id="btn-list" ref="btn_list"></btn-list>
     <vis-container id="vis-canvas" ref="vis_canvas"></vis-container>
-    <EditHost v-if="false"></EditHost>
+    <EditSwitch></EditSwitch>
+    <EditHost></EditHost>
     <div
       v-if="checkTag"
       :style="{ left: mouseTag.x - 45 + 'px', top: mouseTag.y - 50 + 'px' }"
@@ -17,6 +18,7 @@
 import BtnList from "@/components/canvas/BtnList.vue";
 import VisContainer from "../canvas/vis/VisContainer.vue";
 import EditHost from "../edit/EditHost.vue";
+import EditSwitch from "../edit/EditSwitch.vue";
 
 export default {
   name: "MainPage",
@@ -24,6 +26,7 @@ export default {
     BtnList,
     VisContainer,
     EditHost,
+    EditSwitch,
   },
   data() {
     return {
@@ -132,7 +135,7 @@ export default {
   position: relative;
   display: flex;
   flex-direction: row;
-  background-color: #eee;
+  background-color: #eeeeee88;
   width: 800px;
   height: 650px;
 }

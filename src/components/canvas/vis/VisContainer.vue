@@ -88,7 +88,6 @@ export default {
           enabled: false,
           addNode: (node, callback) => {
             let type = this.newItem.type;
-            console.log(type);
             this.eventBus.emit("add" + type + "Dialog", this.nextLabel(type));
             if (type == "Host") {
               this.eventBus.on("newHostSuccess", (data) => {
@@ -103,7 +102,21 @@ export default {
                 callback();
                 this.eventBus.off("newHostSuccess");
               });
+            } else if (type == "Switch") {
+              this.eventBus.on("newSwitchSuccess", (data) => {
+                node.label = data.name;
+                node.group = data.type;
+                this.nodeList[data.type].push(node);
+                this.newItem.set();
+                callback(node);
+                this.eventBus.off("newSwitchSuccess");
+              });
+              this.eventBus.on("canceled", () => {
+                callback();
+                this.eventBus.off("newSwitchSuccess");
+              });
             } else {
+              console.log(type);
               node.label = this.nextLabel(type);
               node.group = type;
               this.nodeList[type].push(node);
