@@ -21,7 +21,7 @@ export const option = {
     enabled: false,
   },
   physics: {
-    enabled: true,
+    enabled: false,
   },
   nodes: {
     size: 30,
@@ -43,7 +43,7 @@ export const option = {
     },
   },
   edges: {
-    smooth: true,
+    smooth: false,
     color: "green",
   },
   groups: {

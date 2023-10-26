@@ -17,40 +17,14 @@ export default {
 
   mounted() {
     const container = this.$refs.vis;
-    // const options = this.options;
-    // Create and fill datasets
     const nodes = (this.nodes = new DataSet());
     const edges = (this.edges = new DataSet());
-    // this.replaceItems();
-    // nodes.add({ id: 2, label: "Node 2" });
-    // Create the network
     const net = new Network(container, { nodes, edges }, this.options);
     this.net = net;
-
-    // this.nodes.add({ id: 2, label: "Node 2" });
-    // this.cleanUpCallbacks.push(() => {
-    //   net.destroy();
-    // });
-
-    // // Therefore this can't be done before the topology is built.
-
-    // this.cleanUpCallbacks.push(
-    //   this.$store.subscribe(({ type, payload }, { data }) => {
-    //     (this.storeActions[type] || (() => {}))(payload, data);
-    //   })
-    // );
 
     this.$emit("ready", { container, net, nodes, edges });
   },
   methods: {
-    // replaceItems() {
-    //   // Preprocess items
-    //   const items = Object.keys(this.data.items).map((id) => {
-    //     const node = JSON.parse(JSON.stringify(this.data.items[id]));
-    //     node.id = id;
-    //     return node;
-    //   });
-    // },
     isEdge(type) {
       return type === "link" || type === "association";
     },

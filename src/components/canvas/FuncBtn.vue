@@ -25,6 +25,7 @@ export default {
     return {
       icon: null,
       images: {
+        // controller: ""
         host: "mdi-laptop",
         switch: "mdi-switch",
         edge: "mdi-transit-connection-variant",

@@ -1,9 +1,12 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" persistent width="640" ref="addHostDialog">
-      <!-- <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props"> Open Dialog </v-btn>
-      </template> -->
+    <v-dialog
+      v-model="dialog"
+      persistent
+      width="640"
+      ref="addHostDialog"
+      @keydown="hotkeys"
+    >
       <v-card>
         <v-card-title>
           <v-icon icon="mdi-laptop"></v-icon>
@@ -20,7 +23,6 @@
                   autofocus
                   variant="underlined"
                 ></v-text-field>
-                <p>{{ host.name }}</p>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -56,7 +58,14 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+          <v-btn
+            color="blue-darken-1"
+            variant="text"
+            @click="
+              dialog = false;
+              this.eventBus.emit('canceled');
+            "
+          >
             Close
           </v-btn>
           <v-btn
@@ -76,8 +85,13 @@
 <script>
 export default {
   mounted() {
-    this.eventBus.on("addHostDialog", () => (this.dialog = true));
+    this.eventBus.on("addHostDialog", (nextLabel) => {
+      this.host.name = nextLabel;
+      this.dialog = true;
+    });
+    this.eventBus.on("canceled", () => this.resetData());
   },
+
   data() {
     return {
       dialog: false,
@@ -91,9 +105,30 @@ export default {
     };
   },
   methods: {
+    hotkeys(e) {
+      if (e.key == "Enter") {
+        this.sendData();
+      }
+    },
+    resetData() {
+      for (let field in this.host) {
+        this.host[field] = null;
+      }
+    },
     sendData() {
-      console.log(this.host);
-      this.dialog = false;
+      if (this.host.name) {
+        this.eventBus.emit("newHostSuccess", {
+          name: this.host.name,
+          defRoute: this.host.defRoute,
+          subnetMask: this.host.subnetMask,
+          ipv4: this.host.ipv4,
+          ipv6: this.host.ipv6,
+          type: "Host",
+        });
+        this.dialog = false;
+      }
+      this.resetData();
+      return;
     },
   },
 };

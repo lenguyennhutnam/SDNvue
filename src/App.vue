@@ -19,14 +19,7 @@ export default {
       isShow: false,
     };
   },
-  methods: {
-    clickBtn(a) {
-      console.log(a.container);
-      console.log(a.net);
-      console.log(a.nodes);
-      console.log(a.edges);
-    },
-  },
+  methods: {},
 };
 </script>
 
